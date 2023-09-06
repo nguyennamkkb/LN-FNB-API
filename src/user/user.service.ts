@@ -27,6 +27,8 @@ export class UserService {
         const res = await this.repository.findOne({ where: { "id": id } });
         return res ? res : null;
     }
+
+    
     async create(item: UserEntity): Promise<UserEntity> {
         item.createAt = Date.now()
         item.updateAt = Date.now()

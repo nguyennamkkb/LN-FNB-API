@@ -2,7 +2,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class ProductEntity {
+export class BillEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -10,26 +10,22 @@ export class ProductEntity {
   user_id: number;
 
   @Column({nullable: false})
-  category_id: number;
+  order_id: number;
+
+  @Column({ width: 1 })
+  type: number;
+
+  @Column({ width: 11 })
+  last_total: number;
+
+  @Column({ width: 100 })
+  table: string;
 
   @Column()
-  name: string;
+  note: string;
 
   @Column()
-  description: string;
-
-  @Column({ width: 11 })
-  price: number;
-
-  @Column({ width: 11 })
-  cost: number;
-
-  
-  @Column({ width: 11 })
-  isHot: number;
-
-  @Column({ type: 'text', nullable: true })
-  image: string;
+  voucher: string;
 
   @Column({ default: 1 })
   status: number;

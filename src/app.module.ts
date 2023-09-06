@@ -3,14 +3,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {databaseConfig} from '../config/database.config'
 import { UserModule } from './user/user.module';
+import { ImageModule } from './image/image.module';
 import { AuthModule } from './auth/auth.module';
-import { RoleModule } from './role/role.module';
-import { CustomerModule } from './customer/customer.module';
-import { EmployeeModule } from './employee/employee.module';
-import { BooksModule } from './books/books.module';
 import { ProductModule } from './product/product.module';
-import { ImagesController } from './image/images.controller';
 import { TestController } from './test/test.controller';
+import { BillModule } from './bill/bill.module';
+import { CategoryModule } from './category/category.module';
+import { DiscountModule } from './discount/discount.module';
+import { OrderModule } from './order/order.module';
+import { TableModule } from './table/table.module';
 
 @Module({
   imports: [
@@ -20,19 +21,22 @@ import { TestController } from './test/test.controller';
       port: 3306,
       username: 'root',
       password: databaseConfig.password,
-      database: 'ln_pos_db',
+      database: 'ln_fnb_db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     AuthModule,
     UserModule,
-    RoleModule,
     AuthModule,
-    CustomerModule,
-    EmployeeModule,
-    BooksModule,
     ProductModule,
+    ImageModule,
+    BillModule,
+    CategoryModule,
+    DiscountModule,
+    OrderModule,
+    TableModule
+
   ],
-  controllers: [ImagesController, TestController]
+  controllers: [TestController]
 })
 export class AppModule { }

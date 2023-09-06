@@ -17,7 +17,6 @@ import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { Common } from "helper/common/common";
 import { Public } from "src/auth/public.decorator";
 import { writeLogToFile } from "./../../helper/common/logger";
-import { UserRequest } from "./user.entity/user.request";
 import { UserEntity } from "./entity/user.entity";
 import { JWTUtil } from "src/auth/JWTUtil";
 const fs = require("fs");

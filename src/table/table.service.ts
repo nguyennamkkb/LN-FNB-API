@@ -2,19 +2,18 @@ import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Long, Repository, Like, LessThan, MoreThan } from 'typeorm';
 import { UpdateResult, DeleteResult } from  'typeorm';
-import { ProductEntity } from './entity/product.entity';
-import {Common} from './../../helper/common/common'
+import { TableEntity } from './entity/table.entity';
+import {Common} from '../../helper/common/common'
 import { log } from 'console';
 
 @Injectable()
-export class ProductService {
+export class TableService {
 
-  constructor(@InjectRepository(ProductEntity) private repository: Repository<ProductEntity>) { }
+  constructor(@InjectRepository(TableEntity) private repository: Repository<TableEntity>) { }
 
-    async findAll(page: number, limit: number, param: any): Promise<[ProductEntity[],number]> {
+    async findAll(page: number, limit: number, param: any): Promise<[TableEntity[],number]> {
         let where = {}
         if (param.store_id) {where['user_id'] = param.store_id} 
-        if (param.category_id) {where['category_id'] = param.category_id} 
         if (param.name) {where['name'] = Like('%'+param.name+'%')} 
         if (param.status) {where['status'] = param.status} 
         const skip = (page - 1) * limit;
@@ -26,18 +25,18 @@ export class ProductService {
         return [res, totalCount];
     }
 
-    async findOne(id: number): Promise<ProductEntity> {
+    async findOne(id: number): Promise<TableEntity> {
         const res = await this.repository.findOne({ where: { "id": id } });
         return res ? res : null;
     }
 
-    async create(item: ProductEntity): Promise<ProductEntity>  {
+    async create(item: TableEntity): Promise<TableEntity>  {
         item.createAt = Date.now()
         item.updateAt = Date.now()
         return await this.repository.save(item)
     }
     
-    async update(item: ProductEntity): Promise<UpdateResult> {
+    async update(item: TableEntity): Promise<UpdateResult> {
         item.updateAt = Date.now()
         try {
             return await this.repository.update(item.id, item)

@@ -15,8 +15,8 @@ export class ImageUtil {
 
     const fileExtension = matches[1];
     const base64Image = matches[2];
-    const fileName = `${Common.makeRandomStringWithLength(5)+Date.now()}.jpeg`;
-    const filePath = `upload/${fileName}`;
+    const fileName = `${Common.makeRandomStringWithLength(10)+Date.now()}`;
+    const filePath = `upload/${fileName}.jpeg`;
 
     // Convert base64 to buffer
     const fileBuffer = Buffer.from(base64Image, 'base64');
@@ -29,7 +29,21 @@ export class ImageUtil {
 
     // Write the compressed image buffer to file
     await fs.writeFile(filePath, compressedImageBuffer);
-
-    return filePath;
+    return fileName;
   }
+  static async deleteImage(fileName: string): Promise<boolean> {
+    var res: boolean = false
+    try {
+      console.log("name:"+fileName);
+      const filePath = `upload/${fileName}.jpeg`;
+      fs.unlinkSync(filePath);
+      res = true
+      console.log("Delete File successfully.");
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+    return res;
+  }
+
 }
