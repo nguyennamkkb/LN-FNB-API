@@ -31,6 +31,9 @@ export class OrderEntity {
   @Column({ type: 'text', nullable: true })
   image: string;
 
+  @Column({ width: 4 })
+  person: number;
+
   @Column({ default: 1 })
   status: number;
 
