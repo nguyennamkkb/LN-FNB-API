@@ -23,6 +23,10 @@ export class UserService {
         const res = await this.repository.findOne({ where: { "phone": phone, "password": password } });
         return res ? res : null;
     }
+    async findOneByEmailPassword(email: string, password: string): Promise<UserEntity | null> {
+        const res = await this.repository.findOne({ where: { "email": email, "password": password } });
+        return res ? res : null;
+    }
     async findOne(id: number): Promise<UserEntity | null> {
         const res = await this.repository.findOne({ where: { "id": id } });
         return res ? res : null;
@@ -56,6 +60,10 @@ export class UserService {
     }
     async findByPhone(phone: string): Promise<UserEntity| null> {
         const res = await this.repository.findOne({ where: { "phone": phone } });
+        return res ? res : null;
+    }
+    async findByEmail(email: string): Promise<UserEntity| null> {
+        const res = await this.repository.findOne({ where: { "email": email } });
         return res ? res : null;
     }
 

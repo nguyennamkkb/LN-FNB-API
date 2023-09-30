@@ -18,19 +18,19 @@ export class UserEntity {
   @Column()
   storeName: string;
 
-  @Column()
+  @Column({nullable: true})
   desciption: string;
 
-  @Column()
+  @Column({nullable: true})
   address: string;
   
-  @Column()
+  @Column({nullable: true})
   logo: string;
 
   @Column({ length: 15, unique: true })
   phone: string;
 
-  @Column()
+  @Column({nullable: true})
   qr: string;
 
   @Column({ default: 1 })

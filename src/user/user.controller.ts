@@ -32,13 +32,14 @@ export class UserController {
       if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
         writeLogToFile(`UserController signup input ${JSON.stringify(item)}`);
         const findUSer = await this.services.findByPhone(item.phone);
-        if (findUSer == null) {
+        const findEmail = await this.services.findByEmail(item.email);
+        if (findUSer == null || findEmail == null) {
           const mk = Common.MD5Hash(Common.keyApp + item.password);
           item.password = mk;
           const res = await this.services.create(item);
           return ResponseHelper.success(res);
         } else {
-          return ResponseHelper.error(0, "Số điện thoại đã tồn tại");
+          return ResponseHelper.error(0, "Số điện thoại hoặc email đã tồn tại");
         }
       } else {
         return ResponseHelper.error(0, "Sai cks");
@@ -54,8 +55,9 @@ export class UserController {
       if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
         writeLogToFile(`UserController checkuser input ${JSON.stringify(item)}` );
         const findUSer = await this.services.findByPhone(item.phone);
-        if (findUSer) {
-          return ResponseHelper.error(0, "Số điện thoại đã tồn tại");
+        const findEmail = await this.services.findByEmail(item.email);
+        if (findEmail) {
+          return ResponseHelper.error(0, "Số email đã tồn tại");
         } else {
           return ResponseHelper.customise(200, "OK");
         }
