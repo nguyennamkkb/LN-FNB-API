@@ -91,8 +91,11 @@ export class TableController {
   @Delete(":id")
   async remove(@Param() param, @Query() query) {
     try {
+      // console.log(param);
+      
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
         const res = await this.services.remove(param.id);
+        
         return ResponseHelper.success(res);
       }
     } catch (error) {
