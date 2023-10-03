@@ -15,17 +15,17 @@ export class ProductEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({nullable: true})
   description: string;
 
   @Column({ width: 11 })
   price: number;
 
-  @Column({ width: 11 })
+  @Column({ width: 11, default: 0})
   cost: number;
 
   
-  @Column({ width: 11 })
+  @Column({ width: 11, default: 0 })
   isHot: number;
 
   @Column({ type: 'text', nullable: true })
