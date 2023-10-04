@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { CategoryEntity } from 'src/category/entity/category.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class ProductEntity {
@@ -39,4 +40,8 @@ export class ProductEntity {
 
   @Column({ type: 'bigint' })
   updateAt: number;
+
+  @ManyToOne(() => CategoryEntity, category => category.products)
+  @JoinColumn({name: 'category_id'})
+  category: CategoryEntity;
 }

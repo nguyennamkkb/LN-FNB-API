@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductEntity } from 'src/product/entity/product.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class CategoryEntity {
@@ -12,6 +13,9 @@ export class CategoryEntity {
   @Column()
   name: string;
 
+  @OneToMany(() => ProductEntity, (product) => product.category) // specify inverse side as a second parameter
+  products: ProductEntity
+  
   @Column({ default: 1 })
   status: number;
 
