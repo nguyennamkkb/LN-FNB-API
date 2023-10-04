@@ -21,6 +21,9 @@ export class CategoryService {
             where: where,
             skip,
             take: limit,
+            relations:{
+                products: true
+            },
         });
         return [res, totalCount];
     }
