@@ -14,7 +14,7 @@ export class CategoryService {
     async findAll(page: number, limit: number, param: any): Promise<[CategoryEntity[],number]> {
         let where = {}
         if (param.store_id) {where['user_id'] = param.store_id} 
-        if (param.name) {where['name'] = Like('%'+param.name+'%')} 
+        if (param.keySearch) {where['name'] = Like('%'+param.keySearch+'%')} 
         if (param.status) {where['status'] = param.status} 
         const skip = (page - 1) * limit;
         const [res, totalCount] = await this.repository.findAndCount({
