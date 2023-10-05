@@ -14,19 +14,35 @@ import { ResponseHelper } from "helper/common/response.helper";
 import { ApiResponse } from "helper/common/response.interface";
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { Common } from "../../helper/common/common";
+import { TableService } from "src/table/table.service";
+import { Public } from "src/auth/public.decorator";
 
 @Controller("orders")
 export class OrderController {
-  constructor(private readonly services: OrderService) {}
+  constructor(private readonly services: OrderService, private readonly tableServices: TableService) {}
 
+  @Public()
   @Post()
   async create(@Body() item): Promise<ApiResponse<OrderEntity>> {
     try {
-      if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
-        const res = await this.services.create(item);
-        return ResponseHelper.success(res);
-      }
-    } catch (error) {
+      // if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
+
+        const listtable: string[] = String(item.table).split(" ")
+        if (listtable.length <= 0) {
+          return ResponseHelper.error(0, "Loi");
+        }
+        for (let index = 0; index < listtable.length; index++) {
+          const element = listtable[index];
+          const table = await this.tableServices.findTable(element)
+          if (table == null) {
+            return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
+          }
+        }
+        let updateTable = await this.tableServices.updateTableSelected(listtable)
+        
+        return ResponseHelper.success(null);
+    }
+    catch (error) {
       return ResponseHelper.error(0, error);
     }
   }

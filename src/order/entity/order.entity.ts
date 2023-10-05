@@ -10,26 +10,16 @@ export class OrderEntity {
   user_id: number;
 
   @Column({nullable: false})
-  category_id: number;
+  total: number;
 
   @Column()
-  name: string;
+  table: string;
 
   @Column()
-  description: string;
+  list_item: string;
 
-  @Column({ width: 11 })
-  price: number;
-
-  @Column({ width: 11 })
-  cost: number;
-
-  
-  @Column({ width: 11 })
-  isHot: number;
-
-  @Column({ type: 'text', nullable: true })
-  image: string;
+  @Column({nullable: true})
+  note: string;
 
   @Column({ width: 4 })
   person: number;

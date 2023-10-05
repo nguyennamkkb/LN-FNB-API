@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Long, Repository, Like, LessThan, MoreThan } from 'typeorm';
+import { Long, Repository, Like, LessThan, MoreThan, In } from 'typeorm';
 import { UpdateResult, DeleteResult } from  'typeorm';
 import { TableEntity } from './entity/table.entity';
 import {Common} from '../../helper/common/common'
@@ -30,6 +30,15 @@ export class TableService {
         return res ? res : null;
     }
 
+    async findTable(table: string): Promise<TableEntity> {
+        let where = {}
+        // where["name"] = In(table)
+        where["name"] = table
+        where["status"] = 1
+        const res = await this.repository.findOne({ where: where });
+        return res ? res : null;
+    }
+
     async create(item: TableEntity): Promise<TableEntity>  {
         item.createAt = Date.now()
         item.updateAt = Date.now()
@@ -42,6 +51,24 @@ export class TableService {
             return await this.repository.update(item.id, item)
         } catch (error) {
             log(error)
+        }
+        // return await this.repository.update(item.id, item)
+    }
+    
+    async updateTableSelected(table: string[]): Promise<UpdateResult> {
+        // const item = await this.repository.findOne({ where: { "id": id } });
+        // item.updateAt = Date.now()
+        let listTable = ""
+        for (let index = 0; index < table.length; index++) {
+            const element = table[index];
+            listTable += "'"+element+"',"
+        }
+        listTable = listTable.substring(0,listTable.length - 1)
+        const sqlString = "update table_entity set status = 2, updateAt="+Date.now()+" where name in ("+listTable+")"
+        try {
+            return await this.repository.query(sqlString)
+        } catch (error) {
+            log("er"+error)
         }
         // return await this.repository.update(item.id, item)
     }

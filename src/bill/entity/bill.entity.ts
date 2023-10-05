@@ -35,4 +35,6 @@ export class BillEntity {
 
   @Column({ type: 'bigint' })
   updateAt: number;
+
+  
 }
