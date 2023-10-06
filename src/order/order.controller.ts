@@ -42,7 +42,6 @@ export class OrderController {
         if (updateTable.affectedRows <= 0) {
           return ResponseHelper.success("Lỗi");
         }
-        item.list_item = JSON.stringify(item.list_item)
         const res = await this.services.create(item)
         return ResponseHelper.success(res);
        
@@ -64,7 +63,7 @@ export class OrderController {
           page,
           limit,
           query
-        );
+        );  
         return {
           statusCode: 200,
           message: "Thành công!",
