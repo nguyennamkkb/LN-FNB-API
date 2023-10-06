@@ -55,7 +55,7 @@ export class TableService {
         // return await this.repository.update(item.id, item)
     }
     
-    async updateTableSelected(table: string[]): Promise<UpdateResult> {
+    async updateTableSelected(table: string[]): Promise<any> {
         // const item = await this.repository.findOne({ where: { "id": id } });
         // item.updateAt = Date.now()
         let listTable = ""
@@ -71,6 +71,23 @@ export class TableService {
             log("er"+error)
         }
         // return await this.repository.update(item.id, item)
+    }
+
+    async resetTable(table: string[]): Promise<any> {
+        // const item = await this.repository.findOne({ where: { "id": id } });
+        // item.updateAt = Date.now()
+        let listTable = ""
+        for (let index = 0; index < table.length; index++) {
+            const element = table[index];
+            listTable += "'"+element+"',"
+        }
+        listTable = listTable.substring(0,listTable.length - 1)
+        const sqlString = "update table_entity set status = 1, updateAt="+Date.now()+" where name in ("+listTable+")"
+        try {
+            return await this.repository.query(sqlString)
+        } catch (error) {
+            log("er"+error)
+        }
     }
 
     async remove(id: number): Promise<DeleteResult> {

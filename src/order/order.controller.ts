@@ -23,7 +23,7 @@ export class OrderController {
 
   @Public()
   @Post()
-  async create(@Body() item): Promise<ApiResponse<OrderEntity>> {
+  async create(@Body() item): Promise<ApiResponse<any>> {
     try {
       // if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
 
@@ -39,8 +39,13 @@ export class OrderController {
           }
         }
         let updateTable = await this.tableServices.updateTableSelected(listtable)
+        if (updateTable.affectedRows <= 0) {
+          return ResponseHelper.success("Lỗi");
+        }
         
-        return ResponseHelper.success(null);
+        const res = await this.services.create(item)
+        return ResponseHelper.success(res);
+       
     }
     catch (error) {
       return ResponseHelper.error(0, error);

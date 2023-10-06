@@ -14,6 +14,7 @@ import { ResponseHelper } from "helper/common/response.helper";
 import { ApiResponse } from "helper/common/response.interface";
 import { UpdateResult } from "typeorm/query-builder/result/UpdateResult";
 import { Common } from "../../helper/common/common";
+import { Public } from "src/auth/public.decorator";
 
 @Controller("tables")
 export class TableController {
@@ -26,6 +27,24 @@ export class TableController {
         const res = await this.services.create(item);
         return ResponseHelper.success(res);
       }
+    } catch (error) {
+      return ResponseHelper.error(0, error);
+    }
+  }
+
+  @Public()
+  @Post("reset")
+  async resetTable(@Body() item): Promise<ApiResponse<any>> {
+    try {
+      // if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
+
+        const listtable: string[] = String(item.table).split(" ")
+        const resetTable = await this.services.resetTable(listtable)
+        if (resetTable.affectedRows > 0) {
+          return ResponseHelper.success("Thành công");
+        }
+        return ResponseHelper.error(0, "Lỗi");
+      // }
     } catch (error) {
       return ResponseHelper.error(0, error);
     }
