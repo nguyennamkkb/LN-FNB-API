@@ -109,10 +109,18 @@ export class OrderController {
   }
 
   @Delete(":id")
-  async remove(@Param() param, @Query() query) {
+  async remove(@Param() param, @Query() query): Promise<ApiResponse<any>> {
     try {
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
-        const res = await this.services.remove(param.id);
+        const order = await this.services.findOrderByIdNUserId(param.id,query.user_id)
+        console.log(order)
+        if (order == null)  return ResponseHelper.error(0, "Loi");
+        
+        const listtable: string[] = String(order.table).split(" ")
+        const resetTable = await this.tableServices.resetTable(listtable)
+        if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
+        
+        const res = await this.services.remove(order.id);
         return ResponseHelper.success(res);
       }
     } catch (error) {

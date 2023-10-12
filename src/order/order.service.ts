@@ -30,6 +30,10 @@ export class OrderService {
         return res ? res : null;
     }
 
+    async findOrderByIdNUserId(id: number, user_id: number): Promise<OrderEntity> {
+        const res = await this.repository.findOne({ where: { "id": id ,"user_id":user_id} });
+        return res ? res : null;
+    }
     async create(item: OrderEntity): Promise<OrderEntity>  {
         item.createAt = Date.now()
         item.updateAt = Date.now()
