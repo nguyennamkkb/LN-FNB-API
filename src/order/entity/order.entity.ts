@@ -15,7 +15,7 @@ export class OrderEntity {
   @Column()
   table: string;
 
-  @Column({type:"text"})
+  @Column({type:"text", nullable: true})
   list_item: string;
 
   @Column({nullable: true})
