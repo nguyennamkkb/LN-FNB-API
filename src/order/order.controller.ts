@@ -130,7 +130,6 @@ export class OrderController {
   async createDatTruoc(@Body() item): Promise<ApiResponse<any>> {
     try {
       // if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
-        item.table = item.table.substring(0,item.table.length - 1)
         const listtable: string[] = String(item.table).split(" ")
         if (listtable.length <= 0) {
           return ResponseHelper.error(0, "Loi");
