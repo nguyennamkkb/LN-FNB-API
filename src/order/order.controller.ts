@@ -97,6 +97,9 @@ export class OrderController {
   async update(@Body() body): Promise<ApiResponse<UpdateResult>> {
     try {
       if (await Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        const order = await this.services.findOne(body.id);
+        const listtable: string[] = String(order.table).split(" ")
+        const updateTable1 = await this.tableServices.updateTableSelected(listtable)
         delete body["cksRequest"];
         delete body["timeRequest"];
         const res = await this.services.update(body);
