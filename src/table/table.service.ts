@@ -80,7 +80,7 @@ export class TableService {
             listTable += "'"+element+"',"
         }
         listTable = listTable.substring(0,listTable.length - 1)
-        const sqlString = "update table_entity set status = 3, updateAt="+Date.now()+" where name in ("+listTable+")"
+        const sqlString = "update table_entity set status = 4, updateAt="+Date.now()+" where name in ("+listTable+")"
         try {
             return await this.repository.query(sqlString)
         } catch (error) {
@@ -106,11 +106,8 @@ export class TableService {
             return error
         }
     }
-
     async remove(id: number): Promise<DeleteResult> {
         return await this.repository.delete(id);
     }
-
-    
 
 }

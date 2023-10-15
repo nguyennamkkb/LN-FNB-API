@@ -129,7 +129,7 @@ export class OrderController {
   @Post("dattruoc")
   async createDatTruoc(@Body() item): Promise<ApiResponse<any>> {
     try {
-      // if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
+      if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
         const listtable: string[] = String(item.table).split(" ")
         if (listtable.length <= 0) {
           return ResponseHelper.error(0, "Loi");
@@ -147,7 +147,7 @@ export class OrderController {
         }
         const res = await this.services.create(item)
         return ResponseHelper.success(res);
-       
+      }
     }
     catch (error) {
       return ResponseHelper.error(0, error);
