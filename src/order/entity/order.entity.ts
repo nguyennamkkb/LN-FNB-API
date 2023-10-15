@@ -28,6 +28,9 @@ export class OrderEntity {
   status: number;
 
   @Column({ type: 'bigint' })
+  time: number;
+
+  @Column({ type: 'bigint' })
   createAt: number;
 
   @Column({ type: 'bigint' })
