@@ -33,7 +33,7 @@ export class UserEntity {
   @Column({nullable: true})
   qr: string;
 
-  @Column({ default: 1 })
+  @Column({ default:  0})
   status: number;
 
   @Column({type: 'bigint'})

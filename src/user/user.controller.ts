@@ -37,6 +37,7 @@ export class UserController {
           const mk = Common.MD5Hash(Common.keyApp + item.password);
           item.password = mk;
           const res = await this.services.create(item);
+          
           return ResponseHelper.success(res);
         } else {
           return ResponseHelper.error(0, "Số điện thoại hoặc email đã tồn tại");

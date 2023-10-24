@@ -71,6 +71,13 @@ export class UserService {
         const res = await this.repository.findOne({ where: { "id": id } });
         return res ? res : null;
     }
-
+    async updateOtp(item: UserEntity): Promise<UpdateResult> {
+        try {
+            item.updateAt = Date.now()
+        return await this.repository.update(item.id, item)
+        } catch (error) {
+            // console.log(error)
+        }
+    }
 
 }
