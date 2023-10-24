@@ -138,8 +138,8 @@ export class UserController {
   async remove(@Param() param, @Query() query) {
     try {
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
-        // const store_id = await Common.getIdShop(query.cksRequest)
-        // if ( store_id != query.id) {
+        // const user_id = await Common.getIdShop(query.cksRequest)
+        // if ( user_id != query.id) {
         //   return ResponseHelper.error(0, "Lỗi");
         // }
         const res = await this.services.remove(param.id);

@@ -13,7 +13,7 @@ export class DiscountService {
 
     async findAll(page: number, limit: number, param: any): Promise<[DiscountEntity[],number]> {
         let where = {}
-        if (param.store_id) {where['user_id'] = param.store_id} 
+        if (param.user_id) {where['user_id'] = param.user_id} 
         if (param.name) {where['name'] = Like('%'+param.name+'%')} 
         if (param.status) {where['status'] = param.status} 
         const skip = (page - 1) * limit;
