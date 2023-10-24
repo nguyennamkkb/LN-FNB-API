@@ -12,6 +12,7 @@ import { CategoryModule } from './category/category.module';
 import { DiscountModule } from './discount/discount.module';
 import { OrderModule } from './order/order.module';
 import { TableModule } from './table/table.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -34,7 +35,8 @@ import { TableModule } from './table/table.module';
     CategoryModule,
     DiscountModule,
     OrderModule,
-    TableModule
+    TableModule,
+    EmailModule
 
   ],
   controllers: [TestController]
