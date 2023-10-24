@@ -21,7 +21,6 @@ import { Public } from "src/auth/public.decorator";
 export class OrderController {
   constructor(private readonly services: OrderService, private readonly tableServices: TableService) {}
 
-  @Public()
   @Post()
   async create(@Body() item): Promise<ApiResponse<any>> {
     try {
@@ -98,6 +97,9 @@ export class OrderController {
   async update(@Body() body): Promise<ApiResponse<UpdateResult>> {
     try {
       if (await Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        const order = await this.services.findOne(body.id);
+        const listtable: string[] = String(order.table).split(" ")
+        const updateTable1 = await this.tableServices.updateTableSelected(listtable)
         delete body["cksRequest"];
         delete body["timeRequest"];
         const res = await this.services.update(body);
@@ -123,6 +125,34 @@ export class OrderController {
         return ResponseHelper.success(res);
       }
     } catch (error) {
+      return ResponseHelper.error(0, error);
+    }
+  }
+
+  @Post("dattruoc")
+  async createDatTruoc(@Body() item): Promise<ApiResponse<any>> {
+    try {
+      if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
+        const listtable: string[] = String(item.table).split(" ")
+        if (listtable.length <= 0) {
+          return ResponseHelper.error(0, "Loi");
+        }
+        for (let index = 0; index < listtable.length; index++) {
+          const element = listtable[index];
+          const table = await this.tableServices.findTable(element)
+          if (table == null) {
+            return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
+          }
+        }
+        let updateTable = await this.tableServices.updateTableDatTruoc(listtable)
+        if (updateTable.affectedRows <= 0) {
+          return ResponseHelper.success("Lỗi");
+        }
+        const res = await this.services.create(item)
+        return ResponseHelper.success(res);
+      }
+    }
+    catch (error) {
       return ResponseHelper.error(0, error);
     }
   }

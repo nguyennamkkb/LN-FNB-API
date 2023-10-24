@@ -15,7 +15,7 @@ export class OrderEntity {
   @Column()
   table: string;
 
-  @Column({type:"text"})
+  @Column({type:"text", nullable: true})
   list_item: string;
 
   @Column({nullable: true})
@@ -26,6 +26,9 @@ export class OrderEntity {
 
   @Column({ default: 1 })
   status: number;
+
+  @Column({ type: 'bigint' })
+  time: number;
 
   @Column({ type: 'bigint' })
   createAt: number;
