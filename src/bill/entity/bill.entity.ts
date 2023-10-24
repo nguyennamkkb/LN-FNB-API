@@ -21,10 +21,10 @@ export class BillEntity {
   @Column({ width: 100 })
   table: string;
 
-  @Column()
+  @Column({nullable: true })
   note: string;
 
-  @Column()
+  @Column({nullable: true })
   voucher: string;
 
   @Column({ default: 1 })
@@ -35,6 +35,5 @@ export class BillEntity {
 
   @Column({ type: 'bigint' })
   updateAt: number;
-
   
 }

@@ -113,9 +113,8 @@ export class OrderController {
     try {
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
         const order = await this.services.findOrderByIdNUserId(param.id,query.user_id)
-        console.log(order)
         if (order == null)  return ResponseHelper.error(0, "Loi");
-        
+
         const listtable: string[] = String(order.table).split(" ")
         const resetTable = await this.tableServices.resetTable(listtable)
         if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
