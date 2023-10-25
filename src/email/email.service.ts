@@ -32,6 +32,8 @@ export class EmailService {
             email.otp = otp
             email.status = 1
             const emailOtp = await this.repository.create(email)
+            console.log(emailOtp);
+            
             if (emailOtp) {
                 return otp
             } else {
