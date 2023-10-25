@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Common } from 'helper/common/common';
+import { writeLogToFile } from 'helper/common/logger';
 import * as nodemailer from 'nodemailer';
 import { emit } from 'process';
 import { Repository } from 'typeorm';
@@ -26,22 +27,47 @@ export class EmailService {
     async createOtp(user_id: number): Promise<string> {
 
         try {
-            const email = new EmailEntity()
             const otp = await Common.generateRandomNumberString(6)
-            email.user_id = user_id
-            email.otp = otp
-            email.status = 1
-            const emailOtp = await this.repository.create(email)
-            console.log(emailOtp);
-            
-            if (emailOtp) {
-                return otp
+            const timeNow = Date.now()
+            const otpCoSan = await this.getOtpById(user_id)
+            if (otpCoSan) {
+                const hieu2ThoiGian = timeNow - otpCoSan.updateAt
+                console.log(hieu2ThoiGian);
+
+                if (hieu2ThoiGian >= 30000) {
+
+                    var email = new EmailEntity()
+                    email.user_id = user_id
+                    email.otp = otp
+                    email.status = 1
+                    email.count = 1
+                    email.updateAt = Date.now()
+                    const emailOtp = await this.repository.update(otpCoSan.id, email)
+                    return otp
+
+                } else {
+                    if (otpCoSan.count >= 3) {
+                        return ""
+                    }
+
+                    var email = new EmailEntity()
+                    email.count = otpCoSan.count + 1
+                    await this.repository.update(otpCoSan.id, email)
+                    return otpCoSan.otp
+                }
+
             } else {
-                return ""
+                var email = new EmailEntity()
+                email.user_id = user_id
+                email.otp = otp
+                email.status = 1
+                email.createAt = Date.now()
+                email.updateAt = Date.now()
+                const emailOtp = await this.repository.save(email)
+                return otp
             }
-
         } catch (error) {
-
+            writeLogToFile(error)
         }
     }
 
@@ -65,4 +91,9 @@ export class EmailService {
         const res = await this.repository.findOne({ where: { "user_id": user_id, "otp": otpString } });
         return res ? true : false;
     }
+    async getOtpById(user_id: number): Promise<EmailEntity> {
+        const res = await this.repository.findOne({ where: { "user_id": user_id } });
+        return res ? res : null;
+    }
+
 }

@@ -13,7 +13,6 @@ async function bootstrap() {
     enableDebugMessages: true
   }));
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalPipes(new ValidationPipe());
   // app.enableCors();
   await app.listen(3457);
 }

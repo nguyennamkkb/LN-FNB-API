@@ -27,7 +27,7 @@ export class EmailController {
         if (user == null) return ResponseHelper.error(0, "Khong tim thay tai khoan");
 
         const otp = await this.emailService.checkOtp(user.id,item.otpString)
-
+        
         if (otp == false) return ResponseHelper.error(0, "Sai OTP")
 
         const userUpdate = new UserEntity();

@@ -15,6 +15,9 @@ export class EmailEntity {
   @Column({ default: 1 }) //1: chua su dung, 2 da su dung
   status: number;
 
+  @Column({ default: 1 }) // toi da den 3
+  count: number;
+
   @Column({ type: 'bigint' })
   createAt: number;
 

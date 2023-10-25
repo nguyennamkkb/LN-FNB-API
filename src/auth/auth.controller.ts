@@ -24,10 +24,12 @@ import { EmailService } from 'src/email/email.service';
 export class AuthController {
   constructor(private authService: AuthService, private emailService: EmailService) { }
 
+
   @Public()
   @Post('signin')
   async signIn(@Body() item): Promise<ApiResponse<any>> {
     try {
+      
       const mk = Common.MD5Hash(Common.keyApp + item.password)
       const res = await this.authService.signIn(item.email, mk)
       if (res) {
@@ -35,15 +37,16 @@ export class AuthController {
 
         if (res.status == 0) {
           const emailotp = await this.emailService.createOtp(res.id)
-          
-          if (emailotp.length != 6) return  ResponseHelper.error(0, "Loi xxx");
 
-          const sendOtp = await this.emailService.sendEmail(res.email, "Mã xác nhận - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp)
-          if (sendOtp) {
-            return ResponseHelper.success("Da gui otp vao email");
-          }
-          return ResponseHelper.error(0, "loi gui email");
-          
+          console.log(emailotp);
+
+          if (emailotp.length != 6) return  ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
+
+          this.emailService.sendEmail(res.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "<b>Mã xác nhận của bạn là: " + emailotp + " \nThời hạn sử dụng mã trong vòng 5 phút \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho tôi theo email/skype: nguyennam.kkb@gmail.com</b>")
+
+          return ResponseHelper.success(199,"Da gui otp vao email");
+
+
         } else if (res.status == 1) {
           return ResponseHelper.success(res);
         }
