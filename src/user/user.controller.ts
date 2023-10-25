@@ -19,11 +19,12 @@ import { Public } from "src/auth/public.decorator";
 import { writeLogToFile } from "./../../helper/common/logger";
 import { UserEntity } from "./entity/user.entity";
 import { JWTUtil } from "src/auth/JWTUtil";
-const fs = require("fs");
+import { EmailService } from "src/email/email.service";
+
 
 @Controller("user")
 export class UserController {
-  constructor(private readonly services: UserService,    private readonly jwtUtil: JWTUtil) {}
+  constructor(private readonly emailSservice: EmailService, private readonly services: UserService, private readonly jwtUtil: JWTUtil) { }
 
   @Public()
   @Post()
@@ -37,7 +38,7 @@ export class UserController {
           const mk = Common.MD5Hash(Common.keyApp + item.password);
           item.password = mk;
           const res = await this.services.create(item);
-          
+
           return ResponseHelper.success(res);
         } else {
           return ResponseHelper.error(0, "Số điện thoại hoặc email đã tồn tại");
@@ -54,7 +55,7 @@ export class UserController {
   async checkuser(@Body() item: any): Promise<ApiResponse<UserEntity>> {
     try {
       if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
-        writeLogToFile(`UserController checkuser input ${JSON.stringify(item)}` );
+        writeLogToFile(`UserController checkuser input ${JSON.stringify(item)}`);
         const findUSer = await this.services.findByPhone(item.phone);
         const findEmail = await this.services.findByEmail(item.email);
         if (findEmail) {
@@ -121,7 +122,7 @@ export class UserController {
   }
 
   @Put()
-  async update(@Body() body, @Headers('Authorization') auth: string ): Promise<ApiResponse<UpdateResult>> {
+  async update(@Body() body, @Headers('Authorization') auth: string): Promise<ApiResponse<UpdateResult>> {
     try {
       writeLogToFile(`UserController update input ${JSON.stringify(body)}`);
       if (await Common.verifyRequest(body.cksRequest, body.timeRequest)) {
@@ -147,6 +148,37 @@ export class UserController {
         return ResponseHelper.success(res);
       }
     } catch (error) {
+      return ResponseHelper.error(0, error);
+    }
+  }
+  @Public()
+  @Post('verify')
+  async verify(@Body() item): Promise<ApiResponse<any>> {
+    try {
+
+      const user = await this.services.findByEmail(item.email)
+
+      const otp = await this.emailSservice.getOtpById(user.id)
+
+      if (!otp) return  ResponseHelper.error(0, "Loi 1");
+      const timeNow = Date.now()
+      const hieu2ThoiGian = timeNow - otp.updateAt
+      console.log(hieu2ThoiGian);
+      
+      if (hieu2ThoiGian <= 300000) {
+        console.log(otp.otp);
+        console.log(item.otp);
+        
+        if (otp.otp == item.otp) {
+          user.updateAt = timeNow
+          user.status = 1
+          await this.services.update(user)
+          return ResponseHelper.success("Xác thục thành công");
+        }
+      }
+      return  ResponseHelper.error(0, "Loi 2");
+    }
+    catch (error) {
       return ResponseHelper.error(0, error);
     }
   }

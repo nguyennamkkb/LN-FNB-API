@@ -31,10 +31,9 @@ export class EmailService {
             const timeNow = Date.now()
             const otpCoSan = await this.getOtpById(user_id)
             if (otpCoSan) {
-                const hieu2ThoiGian = timeNow - otpCoSan.updateAt
-                console.log(hieu2ThoiGian);
+                const hieu2ThoiGian = timeNow - otpCoSan.createAt
 
-                if (hieu2ThoiGian >= 30000) {
+                if (hieu2ThoiGian >= 300000) {
 
                     var email = new EmailEntity()
                     email.user_id = user_id

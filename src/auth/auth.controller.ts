@@ -29,22 +29,22 @@ export class AuthController {
   @Post('signin')
   async signIn(@Body() item): Promise<ApiResponse<any>> {
     try {
-      
+
       const mk = Common.MD5Hash(Common.keyApp + item.password)
       const res = await this.authService.signIn(item.email, mk)
       if (res) {
-       
+
 
         if (res.status == 0) {
           const emailotp = await this.emailService.createOtp(res.id)
 
           console.log(emailotp);
 
-          if (emailotp.length != 6) return  ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
+          if (emailotp.length != 6) return ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
 
           this.emailService.sendEmail(res.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp + " \nThời hạn sử dụng mã trong vòng 5 phút \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho tôi theo email/skype: nguyennam.kkb@gmail.com")
 
-          return ResponseHelper.success(199,"Da gui otp vao email");
+          return ResponseHelper.error(199, "Da gui otp vao email");
 
 
         } else if (res.status == 1) {
@@ -57,5 +57,7 @@ export class AuthController {
       return ResponseHelper.error(0, error);
     }
   }
+
+
 
 }
