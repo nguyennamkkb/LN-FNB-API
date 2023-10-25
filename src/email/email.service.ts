@@ -43,7 +43,7 @@ export class EmailService {
         }
     }
 
-    async sendEmail(to: string, subject: string, text: string) {
+    async sendEmail(to: string, subject: string, text: string): Promise<boolean> {
         const mailOptions = {
             from: 'lnquanlynhahang@gmail.com',
             to,
@@ -53,10 +53,11 @@ export class EmailService {
 
         try {
             await this.transporter.sendMail(mailOptions);
-            //   console.log('Email sent successfully');
+            return true
         } catch (error) {
-            //   console.error('Error sending email:', error);
+            return error
         }
+        return false
     }
     async checkOtp(user_id: number, otpString: string): Promise<boolean> {
         const res = await this.repository.findOne({ where: { "user_id": user_id, "otp": otpString } });

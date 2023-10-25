@@ -31,11 +31,18 @@ export class AuthController {
       const mk = Common.MD5Hash(Common.keyApp + item.password)
       const res = await this.authService.signIn(item.email, mk)
       if (res) {
-        const emailotp = await this.emailService.createOtp(res.id)
+       
 
-        if (res.status == 0 && emailotp.length == 6) {
+        if (res.status == 0) {
+          const emailotp = await this.emailService.createOtp(res.id)
+          
+          if (emailotp.length != 6) return  ResponseHelper.error(0, "Loi xxx");
+
           const sendOtp = await this.emailService.sendEmail(res.email, "Mã xác nhận - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp)
-          return ResponseHelper.success(sendOtp);
+          if (sendOtp) {
+            return ResponseHelper.success("Da gui otp vao email");
+          }
+          return ResponseHelper.error(0, "loi gui email");
           
         } else if (res.status == 1) {
           return ResponseHelper.success(res);
