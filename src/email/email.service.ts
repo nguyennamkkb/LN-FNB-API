@@ -40,17 +40,19 @@ export class EmailService {
                     email.otp = otp
                     email.status = 1
                     email.count = 1
+                    email.createAt = Date.now()
                     email.updateAt = Date.now()
                     const emailOtp = await this.repository.update(otpCoSan.id, email)
                     return otp
 
                 } else {
-                    if (otpCoSan.count >= 3) {
+                    if (otpCoSan.count > 3) {
                         return ""
                     }
 
                     var email = new EmailEntity()
                     email.count = otpCoSan.count + 1
+                    email.updateAt = Date.now()
                     await this.repository.update(otpCoSan.id, email)
                     return otpCoSan.otp
                 }
