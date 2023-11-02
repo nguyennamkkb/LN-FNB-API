@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Long, Repository, Like, LessThan, MoreThan } from 'typeorm';
+import { Long, Repository, Like, LessThan, MoreThanOrEqual } from 'typeorm';
 import { UpdateResult, DeleteResult } from  'typeorm';
 import { OrderEntity } from './entity/order.entity';
 import {Common} from '../../helper/common/common'
@@ -15,7 +15,7 @@ export class OrderService {
         let where = {}
         if (param.user_id) {where['user_id'] = param.user_id} 
         if (param.name) {where['name'] = Like('%'+param.name+'%')} 
-        if (param.status) {where['status'] = param.status} 
+        if (param.status) {where['status'] = MoreThanOrEqual(param.status)} 
         const skip = (page - 1) * limit;
         const [res, totalCount] = await this.repository.findAndCount({
             where: where,

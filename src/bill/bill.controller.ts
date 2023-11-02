@@ -23,8 +23,20 @@ export class BillController {
   async create(@Body() item): Promise<ApiResponse<BillEntity>> {
     try {
       if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
-        const res = await this.services.create(item);
-        return ResponseHelper.success(res);
+
+        const bill = await this.services.findByOrderId(item.order_id)
+        if (bill == null) {
+          const res = await this.services.create(item);
+          return ResponseHelper.success(res);
+        }else {
+          item.id = bill.id
+          delete item["cksRequest"];
+          delete item["timeRequest"];
+
+          item.updateAt = item.timeRequest
+          const res = await this.services.update(item);
+          return ResponseHelper.success(item)
+        }
       }
     } catch (error) {
       return ResponseHelper.error(0, error);

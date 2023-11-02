@@ -155,5 +155,27 @@ export class OrderController {
     catch (error) {
       return ResponseHelper.error(0, error);
     }
+  } 
+  @Post('ketthuc')
+  async ketThucOrder(@Body() item): Promise<ApiResponse<any>> {
+    try {
+      if (await Common.verifyRequest(item.cksRequest, item.timeRequest)) {
+        const order = await this.services.findOrderByIdNUserId(item.id,item.user_id)
+        if (order == null)  return ResponseHelper.error(0, "Loi");
+
+        const listtable: string[] = String(order.table).split(" ")
+
+        const resetTable = await this.tableServices.resetTable(listtable)
+
+        if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
+        order.status = 0
+        const res = await this.services.update(order);
+        return ResponseHelper.customise(200,"Thanh cong");
+      }
+       
+    }
+    catch (error) {
+      return ResponseHelper.error(0, error);
+    }
   }
 }

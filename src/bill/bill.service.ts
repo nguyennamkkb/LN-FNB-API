@@ -30,6 +30,11 @@ export class BillService {
         return res ? res : null;
     }
 
+    async findByOrderId(id: number): Promise<BillEntity> {
+        const res = await this.repository.findOne({ where: { "order_id": id } });
+        return res ? res : null;
+    }
+
     async create(item: BillEntity): Promise<BillEntity>  {
         item.createAt = Date.now()
         item.updateAt = Date.now()
@@ -37,7 +42,7 @@ export class BillService {
     }
     
     async update(item: BillEntity): Promise<UpdateResult> {
-        item.updateAt = Date.now()
+        item.updateAt = Number(item.updateAt) 
         try {
             return await this.repository.update(item.id, item)
         } catch (error) {
