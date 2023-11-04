@@ -18,6 +18,9 @@ export class BillEntity {
   @Column({ width: 11 })
   last_total: number;
 
+  @Column({ width: 11 })
+  person: number;
+
   @Column({ width: 100 })
   table: string;
 
