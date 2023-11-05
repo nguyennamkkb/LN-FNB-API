@@ -12,7 +12,7 @@ export class BillEntity {
   @Column({nullable: false})
   order_id: number;
 
-  @Column({ width: 1, default: 1 })
+  @Column({ width: 1, default: 1 }) //1 tien mat, 2 ck
   type: number;
 
   @Column({ width: 11 })
