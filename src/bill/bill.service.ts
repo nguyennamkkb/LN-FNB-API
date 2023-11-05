@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Long, Repository, Like, LessThan, MoreThan } from 'typeorm';
+import { Long, Repository, Like, LessThan, MoreThan, Between } from 'typeorm';
 import { UpdateResult, DeleteResult } from  'typeorm';
 import { BillEntity } from './entity/bill.entity';
 import {Common} from '../../helper/common/common'
@@ -15,6 +15,7 @@ export class BillService {
         let where = {}
         if (param.user_id) {where['user_id'] = param.user_id} 
         if (param.name) {where['name'] = Like('%'+param.name+'%')} 
+        if (param.from && param.to) {where['updateAt'] = Between(Number(param.from), Number(param.to))} 
         if (param.status) {where['status'] = param.status} 
         const skip = (page - 1) * limit;
         const [res, totalCount] = await this.repository.findAndCount({
