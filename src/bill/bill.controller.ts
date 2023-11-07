@@ -79,10 +79,12 @@ export class BillController {
   ): Promise<ApiResponse<BillEntity>> {
     try {
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
-        const res = await this.services.findOne(param.id);
+        
+        const res = await this.services.findOne(param.id, query.user_id);
         return ResponseHelper.success(res);
       }
     } catch (error) {
+      console.log(JSON.stringify(error))
       return ResponseHelper.error(0, error);
     }
   }
@@ -90,6 +92,7 @@ export class BillController {
   async update(@Body() body): Promise<ApiResponse<UpdateResult>> {
     try {
       if (await Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+
         delete body["cksRequest"];
         delete body["timeRequest"];
         const res = await this.services.update(body);

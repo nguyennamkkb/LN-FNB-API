@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderEntity } from 'src/order/entity/order.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class BillEntity {
@@ -39,4 +40,8 @@ export class BillEntity {
   @Column({ type: 'bigint' })
   updateAt: number;
   
+  @OneToOne(() => OrderEntity, order => order.bill)
+  @JoinColumn({name: 'order_id'})
+  order: OrderEntity;
+
 }

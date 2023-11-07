@@ -1,5 +1,6 @@
 
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BillEntity } from 'src/bill/entity/bill.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
 
 @Entity()
 export class OrderEntity {
@@ -35,4 +36,8 @@ export class OrderEntity {
 
   @Column({ type: 'bigint' })
   updateAt: number;
+
+  @OneToOne(() => BillEntity, (bill) => bill.order)
+  bill: BillEntity
+  
 }
