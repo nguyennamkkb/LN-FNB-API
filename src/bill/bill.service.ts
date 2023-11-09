@@ -22,6 +22,9 @@ export class BillService {
             where: where,
             skip,
             take: limit,
+            order: {
+                id : "DESC"
+            }
         });
         return [res, totalCount];
     }
