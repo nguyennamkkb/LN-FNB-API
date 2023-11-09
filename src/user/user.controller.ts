@@ -229,7 +229,7 @@ export class UserController {
         if (otp.otp == item.otp) {
           user.updateAt = timeNow
           user.status = 1
-          user.password  = item.password
+          user.password  = Common.MD5Hash(Common.keyApp + item.password)
           await this.services.update(user)
           return ResponseHelper.success("Đổi mật khẩu thành công");
         }
