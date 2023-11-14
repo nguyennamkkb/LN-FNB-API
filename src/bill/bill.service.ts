@@ -63,6 +63,18 @@ export class BillService {
     async remove(id: number): Promise<DeleteResult> {
         return await this.repository.delete(id);
     }
+    async baoCaoTheoNgay(item: any): Promise<any> {
+
+        const sqlString = "SELECT bill_entity.*, order_entity.note, order_entity.time FROM bill_entity  INNER JOIN order_entity  ON bill_entity.order_id = order_entity.id AND bill_entity.updateAt >= "+item.from+" and bill_entity.updateAt <= "+item.to+" and bill_entity.user_id = "+item.user_id+ ";"
+        // const sqlString = "SELECT bill_entity.*,  order_entity.list_item, order_entity.note, order_entity.time FROM bill_entity  INNER JOIN order_entity  ON bill_entity.order_id = order_entity.id AND bill_entity.updateAt >= "+item.from+" and bill_entity.updateAt <= "+item.to+" and bill_entity.user_id = "+item.user_id+ ";"
+        try {
+            return await this.repository.query(sqlString)
+        } catch (error) {
+            log("er"+error)
+            return error
+        }
+
+    }
 
 
 
