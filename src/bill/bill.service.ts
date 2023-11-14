@@ -5,6 +5,7 @@ import { UpdateResult, DeleteResult } from 'typeorm';
 import { BillEntity } from './entity/bill.entity';
 import { Common } from '../../helper/common/common'
 import { log } from 'console';
+import { OrderEntity } from 'src/order/entity/order.entity';
 
 @Injectable()
 export class BillService {
@@ -64,10 +65,23 @@ export class BillService {
         return await this.repository.delete(id);
     }
 
-    async taoBaoCaoNgay(item: any) : Promise<any> {
+    async layHoaDonTheoNgay(item: any) : Promise<any> {
 
         const dieuKien = " and bill_entity.updateAt >="+item.from+" and bill_entity.updateAt <="+item.to+" and bill_entity.user_id = "+item.user_id+"";
         const sqlString = "SELECT bill_entity.*,  order_entity.note as order_note, order_entity.time FROM bill_entity inner join order_entity where bill_entity.order_id = order_entity.id "+dieuKien+";"
+        // const sqlString = "SELECT bill_entity.*,  order_entity.note as order_note, order_entity.list_item, order_entity.time FROM bill_entity inner join order_entity where bill_entity.order_id = order_entity.id "+dieuKien+";"
+        try {
+            return await this.repository.query(sqlString)
+        } catch (error) {
+            log("er"+error)
+            return error
+        }
+    }
+
+    async layDanhSachOrder(item: any) : Promise<[OrderEntity]> {
+
+        const dieuKien = " order_entity.time >="+item.from+" and order_entity.time <="+item.to+" and order_entity.user_id = "+item.user_id+"";
+        const sqlString = "Select order_entity.id, order_entity.user_id,order_entity.person, order_entity.status, order_entity.time, order_entity.total, order_entity.table, order_entity.createAt   from order_entity where "+dieuKien+";"
         // const sqlString = "SELECT bill_entity.*,  order_entity.note as order_note, order_entity.list_item, order_entity.time FROM bill_entity inner join order_entity where bill_entity.order_id = order_entity.id "+dieuKien+";"
         try {
             return await this.repository.query(sqlString)
