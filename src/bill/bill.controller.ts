@@ -296,6 +296,9 @@ export class BillController {
     for (let index = 0; index < data.length; index++) {
       const e = data[index];
       e.table = e.table.toUpperCase();
+      if (e.status == 0) {
+        continue
+      }
       if (e.status == 1) {
         tongDangPhucVu += 1;
       }
