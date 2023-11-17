@@ -90,7 +90,7 @@ export class BillService {
         }
     }
 
-    async layDanhSachOrder(item: any) : Promise<[OrderEntity]> {
+    async   layDanhSachOrder(item: any) : Promise<[OrderEntity]> {
 
         const dieuKien = " order_entity.time >="+item.from+" and order_entity.time <="+item.to+" and order_entity.user_id = "+item.user_id+"";
         const sqlString = "Select order_entity.id, order_entity.user_id,order_entity.person, order_entity.status, order_entity.time, order_entity.total, order_entity.table, order_entity.createAt   from order_entity where "+dieuKien+";"
