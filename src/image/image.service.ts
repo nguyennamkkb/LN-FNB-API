@@ -33,8 +33,12 @@ export class ImageService {
         const res = await this.repository.find({ where: { "id": id } });
         return res ? res : null;
     }
-    async findByUserId(user_id: number): Promise<ImageEntity[] | null> {
+    async findImageByUserId(user_id: number): Promise<ImageEntity[] | null> {
         const res = await this.repository.find({ where: { "user_id": user_id } });
+        return res ? res : null;
+    }
+    async findImageByUserIdAndName(user_id: number, name: string): Promise<ImageEntity[] | null> {
+        const res = await this.repository.find({ where: { "user_id": user_id, "name":name } });
         return res ? res : null;
     }
    
