@@ -31,6 +31,33 @@ export class ImageUtil {
     await fs.writeFile(filePath, compressedImageBuffer);
     return fileName;
   }
+
+  static async saveImageWithName(base64Data: string, name: string): Promise<string> {
+    const matches = base64Data.match(/^data:image\/([a-z]+);base64,(.+)$/i);
+
+    if (!matches || matches.length !== 3) {
+      throw new Error('Invalid base64 format');
+    }
+    
+    const fileExtension = matches[1];
+    const base64Image = matches[2];
+    const fileName = `${name}`;
+    const filePath = `upload/${fileName}.jpeg`;
+
+    // Convert base64 to buffer
+    const fileBuffer = Buffer.from(base64Image, 'base64');
+
+    // Compress the image
+    const compressedImageBuffer = await sharp(fileBuffer)
+      .resize({ width: 400, withoutEnlargement: true })
+      .jpeg({ quality: 30 })
+      .toBuffer();
+
+    // Write the compressed image buffer to file
+    await fs.writeFile(filePath, compressedImageBuffer);
+    return fileName;
+  }
+
   static async deleteImage(fileName: string): Promise<boolean> {
     var res: boolean = false
     try {

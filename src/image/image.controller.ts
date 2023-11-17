@@ -20,7 +20,7 @@ import { Common } from "helper/common/common";
 import { writeLogToFile } from "helper/common/logger";
 import { UserService } from "src/user/user.service";
 import { ImageEntity } from "./entity/image.entity";
-
+import * as fs from 'fs';
 @Controller("images")
 export class ImagesController {
   constructor(
@@ -45,7 +45,13 @@ export class ImagesController {
           "upload",
           filename + ".jpeg"
         );
-        res.sendFile(imagePath);
+        if (fs.existsSync(imagePath)) {
+
+          res.sendFile(imagePath);
+        } else {
+          res.status(404).send('File not found');
+        }
+
       }
     } catch (error) {
       writeLogToFile(`viewImage catch error ${JSON.stringify(error)}`);
@@ -53,37 +59,83 @@ export class ImagesController {
   }
 
   @Public()
-  @Post("uploadimage")
+  @Post("uploadAnhCuaHang")
   async uploadimage(@Body() body: any): Promise<ApiResponse<any>> {
     try {
-      // if (Common.verifyRequest(body.cksRequest, body.timeRequest)) {
-      const imgs = await this.service.findByUserId(body.user_id);
-      const user = await this.userServices.findById(body.user_id)
-      const url = await ImageUtil.saveImage(body.base64Image);
-      const image = new ImageEntity();
-     
-      if (url == null || user == null) {
-        return
-      }
+      if (Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        const imgs = await this.service.findImageByUserId(body.user_id);
+        const user = await this.userServices.findById(body.user_id);
+        const url = await ImageUtil.saveImage(body.base64Image);
+        const image = new ImageEntity();
 
-      image.user_id = body.user_id;
-      if (imgs.length <= 0) {
-        image.name = url;
-        const res = this.service.create(image);
-        if (res) return ResponseHelper.success(url);
-      }else if (imgs.length > 0){
-        const status = await ImageUtil.deleteImage(imgs[0].name);
-    
-        image.id = imgs[0].id
-        image.name = url
-        const res = this.service.update(image);
-        if (res ) return ResponseHelper.success(url);
+        if (url == null || user == null) {
+          return;
+        }
+
+        image.user_id = body.user_id;
+        if (imgs.length <= 0) {
+          image.name = url;
+          const res = this.service.create(image);
+          if (res) return ResponseHelper.success(url);
+        } else if (imgs.length > 0) {
+          await ImageUtil.deleteImage(imgs[0].name);
+
+          image.id = imgs[0].id;
+          image.name = url;
+          const res = this.service.update(image);
+          if (res) return ResponseHelper.success(url);
+        } else return ResponseHelper.error(0, "Lỗi");
       }
-      else return ResponseHelper.error(0, "Lỗi");
     } catch (error) {
       return ResponseHelper.error(0, error);
     }
   }
+
+  @Public()
+  @Post("uploadAnhSanPham") // md5 user_id+idSanPham+createAt
+  async uploadAnhSanPham(@Body() body: any): Promise<ApiResponse<any>> {
+    try {
+
+      if (Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        //kiểm tra user có trong hệ thống
+
+        const user = await this.userServices.findById(body.user_id);
+        if (user == null)
+          return ResponseHelper.error(0, "tài khoản không tồn tại");
+        // kiem tra anh da ton tai?
+        const tenAnh = ""+body.user_id+body.idSanPham+body.createAt
+        const imgs = await this.service.findImageByUserIdAndName(
+          body.user_id,
+          tenAnh
+        );
+
+       
+
+        const url = await ImageUtil.saveImageWithName(body.base64Image,tenAnh);
+
+        if (url == null) return ResponseHelper.error(0, "Lỗi tạo ảnh");
+        const image = new ImageEntity();
+        image.user_id = body.user_id;
+
+        if (imgs.length <= 0 || imgs == null) {
+          image.name = url;
+          const res = this.service.create(image);
+          if (res) return ResponseHelper.success(url);
+        }
+        else if (imgs.length > 0) {
+          image.id = imgs[0].id;
+          image.name = url;
+          const res = this.service.update(image);
+          if (res) return ResponseHelper.success(url);
+        } else return ResponseHelper.error(0, "Lỗi");
+
+      }
+    } catch (error) {
+
+      return ResponseHelper.error(0, error);
+    }
+  }
+
   @Public()
   @Get()
   async findAll(

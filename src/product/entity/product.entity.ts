@@ -25,7 +25,6 @@ export class ProductEntity {
   @Column({ width: 11, default: 0})
   cost: number;
 
-  
   @Column({ width: 11, default: 0 })
   isHot: number;
 

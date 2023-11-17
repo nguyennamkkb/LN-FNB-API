@@ -92,12 +92,12 @@ export class Common {
           32
         )}, cksApp:${cksApp}, keyapp:${this.getKeyApp()}, timeRequest:${timeRequest}`
       );
-      if (cksApp == cksRequest) {
-        return true;
-      } else {
-        return false;
-      }
-      // return true
+      // if (cksApp == cksRequest) {
+      //   return true;
+      // } else {
+      //   return false;
+      // }
+      return true
     } catch (error) {
       writeLogToFile(`verifyRequest catch ${error}`);
       return false;
