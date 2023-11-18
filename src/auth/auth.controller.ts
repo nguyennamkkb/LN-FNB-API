@@ -40,7 +40,7 @@ export class AuthController {
 
           if (emailotp.length != 6) return ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
 
-          this.emailService.sendEmail(res.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp + " \nThời hạn sử dụng mã trong vòng 5 phút \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho tôi theo email/skype: nguyennam.kkb@gmail.com")
+          this.emailService.sendEmail(res.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp + " \nThời hạn 5 phút có thể sử dụng mã \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho tôi theo email/skype: nguyennam.kkb@gmail.com")
 
           return ResponseHelper.error(199, "Da gui otp vao email");
 
