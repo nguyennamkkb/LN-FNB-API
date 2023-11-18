@@ -292,7 +292,6 @@ export class BillController {
     let tongShip = 0;
     let tongKhach = 0;
     let tongThuDuTinh = 0;
-    console.log(JSON.stringify(data));
     
     for (let index = 0; index < data.length; index++) {
       const e = data[index];
