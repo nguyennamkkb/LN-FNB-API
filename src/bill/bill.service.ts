@@ -92,7 +92,7 @@ export class BillService {
 
     async   layDanhSachOrder(item: any) : Promise<[OrderEntity]> {
 
-        const dieuKien = " order_entity.time >="+item.from+" and order_entity.time <="+item.to+" and order_entity.user_id = "+item.user_id+"";
+        const dieuKien = " order_entity.createAt >="+item.from+" and order_entity.createAt <="+item.to+" and order_entity.user_id = "+item.user_id+"";
         const sqlString = "Select order_entity.id, order_entity.user_id,order_entity.person, order_entity.status, order_entity.time, order_entity.total, order_entity.table, order_entity.createAt   from order_entity where "+dieuKien+";"
         // const sqlString = "SELECT bill_entity.*,  order_entity.note as order_note, order_entity.list_item, order_entity.time FROM bill_entity inner join order_entity where bill_entity.order_id = order_entity.id "+dieuKien+";"
         try {
