@@ -97,7 +97,7 @@ export class BillService {
         // const sqlString = "SELECT bill_entity.*,  order_entity.note as order_note, order_entity.list_item, order_entity.time FROM bill_entity inner join order_entity where bill_entity.order_id = order_entity.id "+dieuKien+";"
         try {
             return await this.repository.query(sqlString)
-        } catch (error) {
+        } catch (error) {   
             log("er"+error)
             return error
         }

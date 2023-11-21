@@ -155,7 +155,7 @@ export class BillController {
 
       const hoaDon = await this.services.layHoaDonTheoNgay(query);
 
-      const tongSoDon = order.length;
+      const tongSoDon = hoaDon.length;
       const [tongDangPhucVu, tongDatTruoc, tongShip, tongKhach, tongThuDuTinh] =
         await this.tongCacLoai_HomNay(order);
 
