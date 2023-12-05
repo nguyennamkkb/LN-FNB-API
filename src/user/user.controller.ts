@@ -129,6 +129,7 @@ export class UserController {
         delete body["cksRequest"];
         delete body["timeRequest"];
         delete body["access_token"];
+        delete body["password"];
         const res = await this.services.update(body);
         return ResponseHelper.success(res);
       }
