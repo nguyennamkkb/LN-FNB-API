@@ -128,6 +128,7 @@ export class UserController {
       if (await Common.verifyRequest(body.cksRequest, body.timeRequest)) {
         delete body["cksRequest"];
         delete body["timeRequest"];
+        delete body["access_token"];
         const res = await this.services.update(body);
         return ResponseHelper.success(res);
       }
@@ -221,9 +222,9 @@ export class UserController {
       
       const timeNow = Date.now()
       const hieu2ThoiGian = timeNow - otp.updateAt
-      console.log(hieu2ThoiGian);
-      console.log(otp.otp);
-      console.log(item.otp);
+      // console.log(hieu2ThoiGian);
+      // console.log(otp.otp);
+      // console.log(item.otp);
 
       if (hieu2ThoiGian <= 300000) {
         if (otp.otp == item.otp) {

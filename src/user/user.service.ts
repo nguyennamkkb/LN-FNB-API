@@ -32,18 +32,19 @@ export class UserService {
         return res ? res : null;
     }
 
-    
+
     async create(item: UserEntity): Promise<UserEntity> {
         item.createAt = Date.now()
         item.updateAt = Date.now()
         return await this.repository.save(item)
     }
     async update(item: UserEntity): Promise<UpdateResult> {
+
         try {
             item.updateAt = Date.now()
-        return await this.repository.update(item.id, item)
+            return await this.repository.update(item.id, item)
         } catch (error) {
-            // console.log(error)
+            console.log(error)
         }
     }
 
@@ -58,11 +59,11 @@ export class UserService {
         const res = await this.repository.findOne({ where: [{ "phone": phone, "password": password }] });
         return res ? res : null;
     }
-    async findByPhone(phone: string): Promise<UserEntity| null> {
+    async findByPhone(phone: string): Promise<UserEntity | null> {
         const res = await this.repository.findOne({ where: { "phone": phone } });
         return res ? res : null;
     }
-    async findByEmail(email: string): Promise<UserEntity| null> {
+    async findByEmail(email: string): Promise<UserEntity | null> {
         const res = await this.repository.findOne({ where: { "email": email } });
         return res ? res : null;
     }
@@ -74,7 +75,7 @@ export class UserService {
     async updateOtp(item: UserEntity): Promise<UpdateResult> {
         try {
             item.updateAt = Date.now()
-        return await this.repository.update(item.id, item)
+            return await this.repository.update(item.id, item)
         } catch (error) {
             // console.log(error)
         }
