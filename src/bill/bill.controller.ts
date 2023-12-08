@@ -72,7 +72,7 @@ export class BillController {
     }
   }
 
-
+  @Public()
   @Get("taoBaoCaoTheoThoiGian")
   async taoBaoCaoTheoThoiGian(@Query() query): Promise<ApiResponse<any>> {
     try {
