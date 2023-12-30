@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Common } from './common';
 
-export async function writeLogToFile(log: string): Promise<void> {
+export  function writeLogToFile(log: string){
     //   const logFilePath = path.join(__dirname, 'logs', 'app.log');
     const timeNow: String = Common.getCurrentTime()
     const fileLogName: String = timeNow.substring(0,10)
@@ -16,5 +16,5 @@ export async function writeLogToFile(log: string): Promise<void> {
     // Append the log to the file
 
     const headLog = timeNow + " " + Common.AppName + ": "
-    await fs.appendFileSync(logFilePath, headLog + log + '\n');
+     fs.appendFileSync(logFilePath, headLog + log + '\n');
 }
