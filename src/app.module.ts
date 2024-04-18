@@ -13,7 +13,6 @@ import { DiscountModule } from './discount/discount.module';
 import { OrderModule } from './order/order.module';
 import { TableModule } from './table/table.module';
 import { EmailModule } from './email/email.module';
-import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -37,8 +36,7 @@ import { CommentModule } from './comment/comment.module';
     DiscountModule,
     OrderModule,
     TableModule,
-    EmailModule,
-    CommentModule
+    EmailModule
 
   ],
   controllers: [TestController]

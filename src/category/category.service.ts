@@ -24,11 +24,6 @@ export class CategoryService {
             relations:{
                 products: true
             },
-            order:{
-                products:{
-                    name:"ASC"
-                }
-            }
         });
         return [res, totalCount];
     }

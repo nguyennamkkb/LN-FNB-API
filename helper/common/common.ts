@@ -2,8 +2,8 @@ import { writeLogToFile } from "./logger";
 
 var md5 = require("md5");
 export class Common {
-  static keyApp: string = process.env.KEY_APP; //50829317681RT3RUH3EZ
-  static AppName: String = process.env.APP_NAME;
+  static keyApp: string = "XY50829317681RT3RUH3EZZ84"; //50829317681RT3RUH3EZ
+  static AppName: String = "Base-Api";
   static getKeyApp(): string {
     return this.keyApp.substring(2, this.keyApp.length - 3);
   }
