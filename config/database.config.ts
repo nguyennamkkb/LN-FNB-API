@@ -1,13 +1,11 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
  
 export const databaseConfig = {
-    type: 'mysql',
-    host: 'localhost',
-    port: 3306,
-    username: 'root',
-    // password: '',
-    // password: 'root',
-    password: 'pos-api.1A',
+    type: process.env.DB_TYPE,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
     entities: [__dirname + '/**/*.entity{.ts,.js}'],
     synchronize: true,
 };
