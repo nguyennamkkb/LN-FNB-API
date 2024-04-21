@@ -190,7 +190,7 @@ export class UserController {
   @Post('sendOtpFogotPassword')
   async sendOtpFogotPassword(@Body() item): Promise<ApiResponse<any>> {
     try {
-
+  
       const user = await this.services.findByEmail(item.email)
       if (user == null) {
         return ResponseHelper.error(0, "Tài khoản không tồn tại");
@@ -198,8 +198,8 @@ export class UserController {
 
       const emailotp = await this.emailSservice.createOtp(user.id)
 
-      if (emailotp.length != 6) return ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
-
+      // if (emailotp.length != 6) return ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
+      console.log("emailotp:"+emailotp)
       this.emailSservice.sendEmail(user.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp + " \nThời hạn sử dụng mã trong vòng 5 phút \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho nhà phát triển theo email/skype: nguyennam.kkb@gmail.com")
 
       return ResponseHelper.error(199, "Đã gửi OTP vào email đăng ký");

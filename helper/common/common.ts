@@ -2,11 +2,9 @@ import { writeLogToFile } from "./logger";
 
 var md5 = require("md5");
 export class Common {
-  static keyApp: string = process.env.KEY_APP; //50829317681RT3RUH3EZ
+  static keyApp: string = process.env.KEY_APP;
   static AppName: String = process.env.APP_NAME;
-  static getKeyApp(): string {
-    return this.keyApp.substring(2, this.keyApp.length - 3);
-  }
+
   static removeAccents(str: string): string {
     var AccentsMap = [
       "aàảãáạăằẳẵắặâầẩẫấậ",
@@ -84,21 +82,26 @@ export class Common {
     timeRequest: number
   ): Promise<boolean> {
     try {
-      const dataCks = this.getKeyApp() + timeRequest;
+      const key_app =  process.env.KEY_APP
+      const dataCks = key_app + timeRequest;
       const cksApp = this.MD5Hash(dataCks);
-      writeLogToFile(
-        `verifyRequest cksRequest:${cksRequest.substring(
-          0,
-          32
-        )}, cksApp:${cksApp}, keyapp:${this.getKeyApp()}, timeRequest:${timeRequest}`
-      );
-      // if (cksApp == cksRequest) {
-      //   return true;
-      // } else {
-      //   return false;
-      // }
+      // writeLogToFile(
+      //   `verifyRequest cksRequest:${cksRequest.substring(
+      //     0,
+      //     32
+      //   )}, cksApp:${cksApp}, keyapp:${this.keyApp}, timeRequest:${timeRequest}`
+      // );
+ 
+      if (cksApp == cksRequest) {
+
+        return true;
+      } else {
+
+        return false;
+      }
       return true
     } catch (error) {
+      
       writeLogToFile(`verifyRequest catch ${error}`);
       return false;
     }

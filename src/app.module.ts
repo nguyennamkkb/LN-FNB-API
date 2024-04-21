@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import {databaseConfig} from '../config/database.config'
+import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { ImageModule } from './image/image.module';
 import { AuthModule } from './auth/auth.module';
@@ -16,12 +17,16 @@ import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: databaseConfig.password,
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10),
+      username: process.env.DB_USER,
+      password: process.env.DB_PASS,
       database: 'ln_fnb_db',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,

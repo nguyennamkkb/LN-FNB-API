@@ -14,7 +14,9 @@ export class BillService {
 
     async findAll(page: number, limit: number, param: any): Promise<[BillEntity[], number]> {
         let where = {}
+        if (param.id) { where['id'] = param.id }
         if (param.user_id) { where['user_id'] = param.user_id }
+        
         if (param.name) { where['name'] = Like('%' + param.name + '%') }
         if (param.from && param.to) { where['updateAt'] = Between(Number(param.from), Number(param.to)) }
         if (param.status) { where['status'] = param.status }

@@ -15,6 +15,13 @@ export class ImageEntity {
   @Column({ default: 1 })
   status: number;
 
+  @Column({ default: 1 })
+  type: number;
+  //1: anh sp
+  //2: anh qr
+  //3: anh logo
+  //4: anh cua hang
+
   @Column({ type: 'bigint' })
   createAt: number;
 

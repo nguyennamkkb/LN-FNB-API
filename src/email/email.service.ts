@@ -13,13 +13,15 @@ export class EmailService {
     private transporter: nodemailer.Transporter;
 
     constructor(@InjectRepository(EmailEntity) private repository: Repository<EmailEntity>) {
+
         this.transporter = nodemailer.createTransport({
-            host: emailConfig.host,
-            port: emailConfig.port,
+            host: process.env.SMTP_HOST,
+            port: parseInt(process.env.SMTP_PORT, 10),
+
             secure: false, // Set to true if using port 465
             auth: {
-                user: emailConfig.user,
-                pass: emailConfig.pass,
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
         });
 
@@ -84,6 +86,7 @@ export class EmailService {
             await this.transporter.sendMail(mailOptions);
             return true
         } catch (error) {
+            console.log(error)
             return error
         }
         return false

@@ -92,6 +92,95 @@ export class ImagesController {
   }
 
   @Public()
+  @Post("uploadAnhQR") // md5 user_id+idSanPham+createAt
+  async uploadAnhQR(@Body() body: any): Promise<ApiResponse<any>> {
+    try {
+
+      if (Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        //kiểm tra user có trong hệ thống
+
+        const user = await this.userServices.findById(body.user_id);
+        if (user == null)
+          return ResponseHelper.error(0, "tài khoản không tồn tại");
+        // kiem tra anh da ton tai?
+        const tenAnh = "qr"+body.user_id
+        const imgs = await this.service.findImageByUserIdAndName(
+          body.user_id,
+          tenAnh
+        );
+
+       
+
+        const url = await ImageUtil.saveImageWithName(body.base64Image,tenAnh);
+
+        if (url == null) return ResponseHelper.error(0, "Lỗi tạo ảnh");
+        const image = new ImageEntity();
+        image.user_id = body.user_id;
+        image.type = 2 // anh qr 
+        if (imgs.length <= 0 || imgs == null) {
+          image.name = url;
+          const res = this.service.create(image);
+          if (res) return ResponseHelper.success(url);
+        }
+        else if (imgs.length > 0) {
+          image.id = imgs[0].id;
+          image.name = url;
+          const res = this.service.update(image);
+          if (res) return ResponseHelper.success(url);
+        } else return ResponseHelper.error(0, "Lỗi");
+
+      }
+    } catch (error) {
+
+      return ResponseHelper.error(0, error);
+    }
+  }
+  @Public()
+  @Post("uploadAnhLogo") // md5 user_id+idSanPham+createAt
+  async uploadAnhLogo(@Body() body: any): Promise<ApiResponse<any>> {
+    try {
+
+      if (Common.verifyRequest(body.cksRequest, body.timeRequest)) {
+        //kiểm tra user có trong hệ thống
+
+        const user = await this.userServices.findById(body.user_id);
+        if (user == null)
+          return ResponseHelper.error(0, "tài khoản không tồn tại");
+        // kiem tra anh da ton tai?
+        const tenAnh = "logo"+body.user_id
+        const imgs = await this.service.findImageByUserIdAndName(
+          body.user_id,
+          tenAnh
+        );
+
+       
+
+        const url = await ImageUtil.saveImageWithName(body.base64Image,tenAnh);
+
+        if (url == null) return ResponseHelper.error(0, "Lỗi tạo ảnh");
+        const image = new ImageEntity();
+        image.user_id = body.user_id;
+        image.type = 3 // anh logo 
+        if (imgs.length <= 0 || imgs == null) {
+          image.name = url;
+          const res = this.service.create(image);
+          if (res) return ResponseHelper.success(url);
+        }
+        else if (imgs.length > 0) {
+          image.id = imgs[0].id;
+          image.name = url;
+          const res = this.service.update(image);
+          if (res) return ResponseHelper.success(url);
+        } else return ResponseHelper.error(0, "Lỗi");
+
+      }
+    } catch (error) {
+
+      return ResponseHelper.error(0, error);
+    }
+  }
+ 
+  @Public()
   @Post("uploadAnhSanPham") // md5 user_id+idSanPham+createAt
   async uploadAnhSanPham(@Body() body: any): Promise<ApiResponse<any>> {
     try {

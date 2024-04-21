@@ -58,6 +58,7 @@ export class TableController {
   ): Promise<ApiResponse<TableEntity[]>> {
     try {
       if (await Common.verifyRequest(query.cksRequest, query.timeRequest)) {
+        
         const [res, totalCount] = await this.services.findAll(
           page,
           limit,
@@ -75,6 +76,7 @@ export class TableController {
         };
       }
     } catch (error) {
+      console.log(error)
       return ResponseHelper.error(0, error);
     }
   }

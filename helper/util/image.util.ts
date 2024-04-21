@@ -50,7 +50,7 @@ export class ImageUtil {
     // Compress the image
     const compressedImageBuffer = await sharp(fileBuffer)
       .resize({ width: 400, withoutEnlargement: true })
-      .jpeg({ quality: 30 })
+      .jpeg({ quality: 5 })
       .toBuffer();
 
     // Write the compressed image buffer to file
