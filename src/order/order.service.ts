@@ -24,7 +24,17 @@ export class OrderService {
         });
         return [res, totalCount];
     }
-
+    async findBy(param: any): Promise<OrderEntity[]> {
+        let where = {}
+        if (param.user_id) {where['user_id'] = param.user_id} 
+        if (param.table) {where['table'] = Like('%'+param.table+'%')} 
+        if (param.status) {where['status'] = MoreThanOrEqual(param.status)} 
+     
+        const res = await this.repository.find({
+            where: where,
+        });
+        return res;
+    }
     async findOne(id: number): Promise<OrderEntity> {
         const res = await this.repository.findOne({ where: { "id": id } });
         return res ? res : null;

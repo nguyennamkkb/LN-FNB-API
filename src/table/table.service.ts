@@ -55,7 +55,7 @@ export class TableService {
         // return await this.repository.update(item.id, item)
     }
     
-    async updateTableSelected(table: string[]): Promise<any> {
+    async updateTableSelected(table: string[]): Promise<any> { // dang chon mon
         // const item = await this.repository.findOne({ where: { "id": id } });
         // item.updateAt = Date.now()
         let listTable = ""
@@ -73,7 +73,7 @@ export class TableService {
         }
         // return await this.repository.update(item.id, item)
     }
-    async updateTableDatTruoc(table: string[]): Promise<any> {
+    async updateTableDatTruoc(table: string[]): Promise<any> { // ban dat truoc
         let listTable = ""
         for (let index = 0; index < table.length; index++) {
             const element = table[index];
@@ -81,6 +81,23 @@ export class TableService {
         }
         listTable = listTable.substring(0,listTable.length - 1)
         const sqlString = "update table_entity set status = 4, updateAt="+Date.now()+" where name in ("+listTable+")"
+        try {
+            return await this.repository.query(sqlString)
+        } catch (error) {
+            log("er"+error)
+            return error
+        }
+    }
+
+    async updateTableWStatus(table: string[], status: number): Promise<any> { // Đặt lại trạng thái
+        let listTable = ""
+        for (let index = 0; index < table.length; index++) {
+            const element = table[index];
+            listTable += "'"+element+"',"
+        }
+        listTable = listTable.substring(0,listTable.length - 1)
+        const sqlString = "update table_entity set status = "+status+", updateAt="+Date.now()+" where name in ("+listTable+")"
+        log("updateTableWStatus:"+sqlString)
         try {
             return await this.repository.query(sqlString)
         } catch (error) {
@@ -99,6 +116,7 @@ export class TableService {
         }
         listTable = listTable.substring(0,listTable.length - 1)
         const sqlString = "update table_entity set status = 1, updateAt="+Date.now()+" where name in ("+listTable+")"
+        log(sqlString)
         try {
             return await this.repository.query(sqlString)
         } catch (error) {

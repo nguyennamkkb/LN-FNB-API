@@ -30,13 +30,16 @@ export class OrderController {
         if (listtable.length <= 0) {
           return ResponseHelper.error(0, "Loi");
         }
-        for (let index = 0; index < listtable.length; index++) {
-          const element = listtable[index];
-          const table = await this.tableServices.findTable(element)
-          if (table == null) {
-            return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
-          }
-        }
+        // kiem tra bàn đã có người ngồi và trả về lỗi
+        // for (let index = 0; index < listtable.length; index++) {
+        //   const element = listtable[index];
+        //   const table = await this.tableServices.findTable(element)
+        //   if (table == null) {
+        //     return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
+        //   }
+        // }
+        // ket thuc
+
         let updateTable = await this.tableServices.updateTableSelected(listtable)
         if (updateTable.affectedRows <= 0) {
           return ResponseHelper.success("Lỗi");
@@ -118,13 +121,50 @@ export class OrderController {
         if (order == null)  return ResponseHelper.error(0, "Loi");
 
         const listtable: string[] = String(order.table).split(" ")
-        const resetTable = await this.tableServices.resetTable(listtable)
-        if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
+        let where = {}
+        console.log("listtable in"+ listtable)
+
+        for (let index = 0; index < listtable.length; index++) {
+          where['status'] = 1
+          where['table'] = listtable[index]
+          let list_item_order = await this.services.findBy(where)
+          console.log("list_item_order: "+ JSON.stringify(list_item_order))
+
+          list_item_order = list_item_order.filter(function(item) {
+            return item.id !== order.id;
+          });
+          await this.tableServices.resetTable(String(order.table).split(" "))
+
+          switch (true) {
+            case (list_item_order.length == 0):
+              await this.tableServices.resetTable(String(order.table).split(" "))
+              break
+            case (list_item_order.length == 1):
+
+              switch (list_item_order[0].status) {
+                case 1:
+                  await this.tableServices.updateTableWStatus(String(list_item_order[0].table).split(" "),2)
+                  break
+                case 2:
+                  await this.tableServices.updateTableWStatus(String(list_item_order[0].table).split(" "),4)
+                  break
+              }
+             
+              listtable.splice(index, 1);
+              break
+            case (list_item_order.length > 1):
+              listtable.splice(index, 1);
+          }
+        }
+        
+      
+        // if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
         
         const res = await this.services.remove(order.id);
         return ResponseHelper.success(res);
       }
     } catch (error) {
+      console.log(error)
       return ResponseHelper.error(0, error);
     }
   }
@@ -137,13 +177,29 @@ export class OrderController {
         if (listtable.length <= 0) {
           return ResponseHelper.error(0, "Loi");
         }
+        
+
+        // nếu bàn đã có người thì không được chọn
+
+        // for (let index = 0; index < listtable.length; index++) {
+        //   const element = listtable[index];
+        //   const table = await this.tableServices.findTable(element)
+        //   if (table == null) {
+        //     return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
+        //   }
+        // }
+        // Ket thuc
+
+        // loại bỏ bàn đã có người. không đổi trạng thái
         for (let index = 0; index < listtable.length; index++) {
           const element = listtable[index];
           const table = await this.tableServices.findTable(element)
           if (table == null) {
-            return ResponseHelper.error(0, "Bàn "+ table.name + " đã có người ngồi");
+            listtable.splice(index, 1);
           }
         }
+
+
         let updateTable = await this.tableServices.updateTableDatTruoc(listtable)
         if (updateTable.affectedRows <= 0) {
           return ResponseHelper.success("Lỗi");
