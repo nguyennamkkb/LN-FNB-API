@@ -221,9 +221,47 @@ export class OrderController {
 
         const listtable: string[] = String(order.table).split(" ")
 
-        const resetTable = await this.tableServices.resetTable(listtable)
+        // const resetTable = await this.tableServices.resetTable(listtable)
 
-        if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
+        // if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
+
+        let where = {}
+        console.log("listtable in"+ listtable)
+
+        for (let index = 0; index < listtable.length; index++) {
+          where['status'] = 1
+          where['table'] = listtable[index]
+          let list_item_order = await this.services.findBy(where)
+          console.log("list_item_order: "+ JSON.stringify(list_item_order))
+
+          list_item_order = list_item_order.filter(function(item) {
+            return item.id !== order.id;
+          });
+          await this.tableServices.resetTable(String(order.table).split(" "))
+
+          switch (true) {
+            case (list_item_order.length == 0):
+              await this.tableServices.resetTable(String(order.table).split(" "))
+              break
+            case (list_item_order.length == 1):
+
+              switch (list_item_order[0].status) {
+                case 1:
+                  await this.tableServices.updateTableWStatus(String(list_item_order[0].table).split(" "),2)
+                  break
+                case 2:
+                  await this.tableServices.updateTableWStatus(String(list_item_order[0].table).split(" "),4)
+                  break
+              }
+             
+              listtable.splice(index, 1);
+              break
+            case (list_item_order.length > 1):
+              listtable.splice(index, 1);
+          }
+        }
+        
+
         order.status = 0
         const res = await this.services.update(order);
         return ResponseHelper.customise(200,"Thanh cong");
