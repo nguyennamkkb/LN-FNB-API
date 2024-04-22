@@ -61,14 +61,14 @@ export class ImageUtil {
   static async deleteImage(fileName: string): Promise<boolean> {
     var res: boolean = false
     try {
-      console.log("name:"+fileName);
+      //console.log("name:"+fileName);
       const filePath = `upload/${fileName}.jpeg`;
       fs.unlinkSync(filePath);
       res = true
-      console.log("Delete File successfully.");
+      //console.log("Delete File successfully.");
       return res;
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
     return res;
   }

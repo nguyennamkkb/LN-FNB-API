@@ -166,11 +166,11 @@ export class UserController {
       if (!otp) return ResponseHelper.error(0, "Loi 1");
       const timeNow = Date.now()
       const hieu2ThoiGian = timeNow - otp.updateAt
-      console.log(hieu2ThoiGian);
+      //console.log(hieu2ThoiGian);
 
       if (hieu2ThoiGian <= 300000) {
-        console.log(otp.otp);
-        console.log(item.otp);
+        //console.log(otp.otp);
+        //console.log(item.otp);
 
         if (otp.otp == item.otp) {
           user.updateAt = timeNow
@@ -199,7 +199,7 @@ export class UserController {
       const emailotp = await this.emailSservice.createOtp(user.id)
 
       // if (emailotp.length != 6) return ResponseHelper.error(2, "Quá số lần gửi, vui lòng chờ 5 phút!");
-      console.log("emailotp:"+emailotp)
+      //console.log("emailotp:"+emailotp)
       this.emailSservice.sendEmail(user.email, "Mã xác nhận: " + emailotp + " - LN Quản lý nhà hàng", "Mã xác nhận của bạn là: " + emailotp + " \nThời hạn sử dụng mã trong vòng 5 phút \nCảm ơn đã sử dụng ứng dụng quản lý nhà hàng \nXin liên hệ cho nhà phát triển theo email/skype: nguyennam.kkb@gmail.com")
 
       return ResponseHelper.error(199, "Đã gửi OTP vào email đăng ký");
@@ -223,9 +223,9 @@ export class UserController {
       
       const timeNow = Date.now()
       const hieu2ThoiGian = timeNow - otp.updateAt
-      // console.log(hieu2ThoiGian);
-      // console.log(otp.otp);
-      // console.log(item.otp);
+      // //console.log(hieu2ThoiGian);
+      // //console.log(otp.otp);
+      // //console.log(item.otp);
 
       if (hieu2ThoiGian <= 300000) {
         if (otp.otp == item.otp) {

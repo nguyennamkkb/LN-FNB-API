@@ -122,13 +122,13 @@ export class OrderController {
 
         const listtable: string[] = String(order.table).split(" ")
         let where = {}
-        console.log("listtable in"+ listtable)
+        //console.log("listtable in"+ listtable)
 
         for (let index = 0; index < listtable.length; index++) {
           where['status'] = 1
           where['table'] = listtable[index]
           let list_item_order = await this.services.findBy(where)
-          console.log("list_item_order: "+ JSON.stringify(list_item_order))
+          //console.log("list_item_order: "+ JSON.stringify(list_item_order))
 
           list_item_order = list_item_order.filter(function(item) {
             return item.id !== order.id;
@@ -164,7 +164,7 @@ export class OrderController {
         return ResponseHelper.success(res);
       }
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       return ResponseHelper.error(0, error);
     }
   }
@@ -226,13 +226,13 @@ export class OrderController {
         // if (resetTable.affectedRows <= 0) return  ResponseHelper.error(0, "Loi");
 
         let where = {}
-        console.log("listtable in"+ listtable)
+        //console.log("listtable in"+ listtable)
 
         for (let index = 0; index < listtable.length; index++) {
           where['status'] = 1
           where['table'] = listtable[index]
           let list_item_order = await this.services.findBy(where)
-          console.log("list_item_order: "+ JSON.stringify(list_item_order))
+          //console.log("list_item_order: "+ JSON.stringify(list_item_order))
 
           list_item_order = list_item_order.filter(function(item) {
             return item.id !== order.id;
